@@ -1,0 +1,49 @@
+{
+    "name": "surgiie/artisan-arbitrary-options",
+    "description": "Allow arbitrary options to be passed to laravel artisan commands.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "php",
+        "laravel",
+        "artisan",
+        "command",
+        "options",
+        "arbitrary"
+    ],
+    "authors": [
+        {
+            "name": "Sergio Compean",
+            "email": "scompean24@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2.0",
+        "illuminate/console": "^11.0|^12.0",
+        "spatie/invade": "^2.1"
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.34",
+        "laravel/pint": "^1.16",
+        "mockery/mockery": "^1.6",
+        "symfony/var-dumper": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Surgiie\\ArtisanArbitraryOptions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Surgiie\\ArtisanArbitraryOptions\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/pest tests -c phpunit.dist.xml"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
