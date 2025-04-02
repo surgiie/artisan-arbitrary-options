@@ -31,13 +31,11 @@ abstract class Command extends BaseCommand
     {
         parent::__construct();
 
-        if (! $this->shouldHaveArbitraryOptions()) {
-            return;
+        if ($this->shouldHaveArbitraryOptions()) {
+            $this->arbitraryOptions = collect();
+            $this->ignoreValidationErrors();
         }
 
-        $this->arbitraryOptions = collect();
-        // Ignore validation errors for arbitrary options support.
-        $this->ignoreValidationErrors();
     }
 
     /**
@@ -55,7 +53,9 @@ abstract class Command extends BaseCommand
     {
 
         if (! $this->shouldHaveArbitraryOptions()) {
-            return parent::initialize($input, $output);
+            parent::initialize($input, $output);
+
+            return;
         }
 
         if ($input instanceof StringInput) {
