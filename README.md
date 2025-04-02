@@ -4,7 +4,6 @@
 
 This package allows your artisan commands to accept arbitrary options not part of the command signature.
 
-
 ## Install
 
 ```bash
@@ -31,10 +30,45 @@ class MyCommand extends ArbitraryOptionsCommand
         // Access arbitrary options not defined in the signature.
         // for example if --name wasnt defined in the signature,
         // you can access it like so:
-        $this->arbitraryOptions->get('name');
+        $name = $this->arbitraryOptions->get('name');
     }
 }
 ```
 
+## Things To Consider:
 
+In order to allow arbitrary options, this does make your command lose it's validation for "unknown options". If this is a problem, its encouraged that you validate anything you're not expecting in your command's `handle` method.
 
+For example you may consider doing something like this in your command:
+
+```php
+$this->arbitraryOptions->keys()->each(function ($option)) {
+    if (! in_array($option, ['name', 'age'])) {
+        $this->fail("Unknown or not accepted option encountered: `{$option}`.");
+    }
+});
+```
+
+### Disable Arbitrary Options
+
+If you want to disable arbitrary options for a specific command, you can do so by utilizing the `shouldHaveArbitraryOptions` method:
+
+```php
+<?php
+namespace App\Console\Commands;
+
+use Surgiie\ArbitraryOptions\Command as ArbitraryOptionsCommand;
+
+class ExampleCommand extends ArbitraryOptionsCommand
+{
+    protected $signature = 'example:command ...';
+
+    public function shouldHaveArbitraryOptions(): bool
+    {
+        return false;
+    }
+}
+
+```
+
+This will make the command behave as if it didn't have arbitrary options enabled and will throw an error if an unknown option is passed.

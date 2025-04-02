@@ -31,10 +31,21 @@ abstract class Command extends BaseCommand
     {
         parent::__construct();
 
-        $this->arbitraryOptions = collect();
+        if (! $this->shouldHaveArbitraryOptions()) {
+            return;
+        }
 
+        $this->arbitraryOptions = collect();
         // Ignore validation errors for arbitrary options support.
         $this->ignoreValidationErrors();
+    }
+
+    /**
+     * Check if arbitrary options should be allowed.
+     */
+    protected function shouldHaveArbitraryOptions(): bool
+    {
+        return true;
     }
 
     /**
@@ -42,10 +53,15 @@ abstract class Command extends BaseCommand
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        // parse arbitrary options for variable data.
+
+        if (! $this->shouldHaveArbitraryOptions()) {
+            return parent::initialize($input, $output);
+        }
+
         if ($input instanceof StringInput) {
             $input = new ArrayInput(explode(' ', $input));
         }
+
         $tokens = $input instanceof ArrayInput ? invade($input)->parameters : invade($input)->tokens;
         $parser = new OptionsParser($tokens);
 
