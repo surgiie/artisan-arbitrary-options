@@ -35,6 +35,12 @@ class MyCommand extends ArbitraryOptionsCommand
 }
 ```
 
+### Option Types
+
+Like normal signature options, options can be of type `string`, `array`, `bool` (true) depending on count/repitition of the option in the command line.
+
+When option is passed multiple times, it will be converted to an array. When no value is passed, it will be converted to a boolean, otherwise the value will be a string.
+
 ## Things To Consider:
 
 In order to allow arbitrary options, this does make your command lose it's validation for "unknown options". If this is a problem, its encouraged that you validate anything you're not expecting in your command's `handle` method.
@@ -71,4 +77,16 @@ class ExampleCommand extends ArbitraryOptionsCommand
 
 ```
 
-This will make the command behave as if it didn't have arbitrary options enabled and will throw an error if an unknown option is passed.
+### Care about order of options?
+
+If you care about the order of the options as they were passed, you can use the `arbritraryOptionsOrdered` property to loop through the options in the order they were passed in.
+This property is formatted as an array of arrays, where each inner array will contain the option name and value:
+
+```php
+
+foreach ($this->arbitraryOptionsOrdered as $option) {
+    $optionName = $option[0];
+    $value = $option[1]; "true" if no value was passed or "<string>" if a value was passed.
+}
+
+```

@@ -24,6 +24,8 @@ abstract class Command extends BaseCommand
      */
     protected Collection $arbitraryOptions;
 
+    protected Collection $arbitraryOptionsOrdered;
+
     /**
      * Constuct a new Command instance.
      */
@@ -33,6 +35,7 @@ abstract class Command extends BaseCommand
 
         if ($this->shouldHaveArbitraryOptions()) {
             $this->arbitraryOptions = collect();
+            $this->arbitraryOptionsOrdered = collect();
             $this->ignoreValidationErrors();
         }
 
@@ -63,9 +66,17 @@ abstract class Command extends BaseCommand
         }
 
         $tokens = $input instanceof ArrayInput ? invade($input)->parameters : invade($input)->tokens;
-        $parser = new OptionsParser($tokens);
-
         $definition = $this->getDefinition();
+
+        $orderedOptions = OptionsParser::parseOptionsOrdered($tokens);
+        foreach ($orderedOptions as $info) {
+            if ($definition->hasOption($info[0])) {
+                continue;
+            }
+            $this->arbitraryOptionsOrdered->push([$info[0], $info[1]]);
+        }
+
+        $parser = new OptionsParser($tokens);
 
         foreach ($parser->parseDefinition() as $name => $data) {
             if (! $definition->hasOption($name)) {
@@ -75,5 +86,6 @@ abstract class Command extends BaseCommand
         }
         // rebind input definition
         $input->bind($definition);
+
     }
 }

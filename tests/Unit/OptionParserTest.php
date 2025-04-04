@@ -137,3 +137,25 @@ it('parses definitions for --name=val options', function () {
         ],
     ]);
 });
+
+it('parses options into a ordered format', function () {
+    $parsed = OptionsParser::parseOptionsOrdered([
+        '--option',
+        'value',
+        '--option',
+        'value2',
+        '--option2',
+        'value2',
+        '--option3',
+        'value3',
+        '--option4',
+        'value4',
+    ]);
+    expect($parsed)->toBe([
+        ['option', 'value'],
+        ['option', 'value2'],
+        ['option2', 'value2'],
+        ['option3', 'value3'],
+        ['option4', 'value4'],
+    ]);
+});

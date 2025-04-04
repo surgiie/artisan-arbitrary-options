@@ -58,6 +58,28 @@ class OptionsParser
     }
 
     /**
+     * Parse the options into a format where they can be looped in order that they were passed.
+     */
+    public static function parseOptionsOrdered(array $options): array
+    {
+        $result = [];
+        $parser = new static($options);
+
+        $iterable = $parser->parseRawOptions();
+
+        foreach ($iterable as $option) {
+            if (str_contains($option, '=')) {
+                $parts = explode('=', $option);
+                $result[] = [ltrim($parts[0], '-'), $parts[1]];
+            } else {
+                $result[] = [ltrim($option, '-'), true];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Parse raw options into format that can be parsed for definition.
      */
     public function parseRawOptions(?array $options = null): array
