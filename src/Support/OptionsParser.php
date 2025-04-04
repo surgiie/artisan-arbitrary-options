@@ -65,7 +65,12 @@ class OptionsParser
         $result = [];
         $parser = new static($options);
 
-        $iterable = $parser->parseRawOptions();
+        if (app()->runningUnitTests()) {
+            $options = $parser->parseTestOptions();
+            $iterable = $parser->parseRawOptions($options);
+        } else {
+            $iterable = $parser->parseRawOptions();
+        }
 
         foreach ($iterable as $option) {
             if (str_contains($option, '=')) {
@@ -90,7 +95,6 @@ class OptionsParser
         foreach ($indexes as $index) {
 
             $current = $options[$index] ?? null;
-
             $next = $options[$index + 1] ?? null;
 
             if (is_null($current)) {
