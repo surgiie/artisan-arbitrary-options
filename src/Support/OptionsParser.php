@@ -25,7 +25,7 @@ class OptionsParser
      */
     public function setOptions(array $options): static
     {
-        $this->options = array_filter($options);
+        $this->options = $options;
 
         return $this;
     }
@@ -39,7 +39,7 @@ class OptionsParser
         $result = [];
         foreach ($iterable as $token => $v) {
             if (str_starts_with($token, '--')) {
-                if ($v == false) {
+                if ($v === false) {
                     continue;
                 }
                 if (is_array($v)) {
