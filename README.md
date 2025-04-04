@@ -86,7 +86,7 @@ This property is formatted as an array of arrays, where each inner array will co
 
 foreach ($this->arbitraryOptionsOrdered as $option) {
     $optionName = $option[0];
-    $value = $option[1]; // "true" if no value was passed or "<string>" if a value was passed.
+    $value = $option[1]; // null if no value was passed or "<string>" if a value was passed.
 }
 
 ```
