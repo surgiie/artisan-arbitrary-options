@@ -72,7 +72,7 @@ class OptionsParser
                 $parts = explode('=', $option);
                 $result[] = [ltrim($parts[0], '-'), $parts[1]];
             } else {
-                $result[] = [ltrim($option, '-'), true];
+                $result[] = [ltrim($option, '-'), null];
             }
         }
 

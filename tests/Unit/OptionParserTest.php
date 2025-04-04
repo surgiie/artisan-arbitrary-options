@@ -150,6 +150,7 @@ it('parses options into a ordered format', function () {
         'value3',
         '--option4',
         'value4',
+        '--option5',
     ]);
     expect($parsed)->toBe([
         ['option', 'value'],
@@ -157,5 +158,6 @@ it('parses options into a ordered format', function () {
         ['option2', 'value2'],
         ['option3', 'value3'],
         ['option4', 'value4'],
+        ['option5', null],
     ]);
 });
